@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="head">
+        <title>Warrior Gym</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}" />
+        <link rel="stylesheet" th:href="@{/css/styles.css}" />
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    </head>
+    <header th:fragment="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" th:href="@{/}"><img th:src="@{/images/logo.png}" alt="Warrior Gym" height="40"/></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto align-items-center">
+                        <li class="nav-item"><a class="nav-link" th:href="@{/experiencia}">Experiencia Warrior</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/ayuda}">Ayuda</a></li>
+                        <li class="nav-item ml-3"><a class="btn btn-warning text-white" th:href="@{/registro}">Inscríbete</a></li>
+                        <li class="nav-item ml-2"><a class="btn btn-outline-secondary" th:href="@{/perfil}"><i class="fas fa-user"></i> Perfil Cliente</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <footer th:fragment="footer">
+        <div class="bg-dark text-white pt-5 pb-3">
+            <div class="container text-center">
+                <img th:src="@{/images/logo-footer.png}" alt="Warrior Gym" height="50" class="mb-3"/>
+                <div class="mb-3">
+                    <a href="https://instagram.com/warrior_gym" class="text-white mx-3"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="https://wa.me/506XXXXXXXX" class="text-white mx-3"><i class="fab fa-whatsapp fa-2x"></i></a>
+                </div>
+                <p class="mb-0">Linea de WhatsApp: <a class="text-white" href="tel:+506XXXXXXXX">+506 XXXXXXXX</a></p>
+            </div>
+        </div>
+    </footer>

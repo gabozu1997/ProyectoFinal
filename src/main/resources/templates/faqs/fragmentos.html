@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/plantilla :: head}"></head>
+<body>
+    <!-- Header común -->
+    <header th:replace="~{layout/plantilla :: header}"></header>
+
+    <!-- Contenedor principal -->
+    <div class="container mt-5">
+        <!-- Hero / Jumbotron -->
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Bienvenido a GymFit</h1>
+            <p class="lead">Tu espacio para entrenar, superarte y vivir saludable.</p>
+            <a th:href="@{/registro}" class="btn btn-primary btn-lg">Regístrate Ahora</a>
+        </div>
+
+        <!-- Sección de características -->
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Clases en Grupo</h5>
+                        <p class="card-text">Yoga, Zumba, HIIT y más. ¡Encuentra tu ritmo!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Entrenamiento Personal</h5>
+                        <p class="card-text">Planes personalizados con entrenadores certificados.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Membresías Flexibles</h5>
+                        <p class="card-text">Mensual, trimestral o anual: elige lo que más te convenga.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center my-5">
+            <h2>¿Listo para transformar tu vida?</h2>
+            <a th:href="@{/membresias}" class="btn btn-outline-primary btn-lg">Ver Membresías</a>
+        </div>
+    </div>
+
+    <!-- Footer común -->
+    <footer th:replace="~{layout/plantilla :: footer}"></footer>
+</body>
+</html>
