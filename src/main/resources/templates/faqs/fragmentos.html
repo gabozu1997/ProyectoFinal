@@ -2,54 +2,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/plantilla :: head}"></head>
 <body>
-    <!-- Header común -->
+    <!-- Header -->
     <header th:replace="~{layout/plantilla :: header}"></header>
 
-    <!-- Contenedor principal -->
-    <div class="container mt-5">
-        <!-- Hero / Jumbotron -->
-        <div class="jumbotron text-center">
-            <h1 class="display-4">Bienvenido a GymFit</h1>
-            <p class="lead">Tu espacio para entrenar, superarte y vivir saludable.</p>
-            <a th:href="@{/registro}" class="btn btn-primary btn-lg">Regístrate Ahora</a>
-        </div>
-
-        <!-- Sección de características -->
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Clases en Grupo</h5>
-                        <p class="card-text">Yoga, Zumba, HIIT y más. ¡Encuentra tu ritmo!</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Entrenamiento Personal</h5>
-                        <p class="card-text">Planes personalizados con entrenadores certificados.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Membresías Flexibles</h5>
-                        <p class="card-text">Mensual, trimestral o anual: elige lo que más te convenga.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CTA -->
-        <div class="text-center my-5">
-            <h2>¿Listo para transformar tu vida?</h2>
-            <a th:href="@{/membresias}" class="btn btn-outline-primary btn-lg">Ver Membresías</a>
+    <!-- Contenido principal -->
+    <div class="hero">
+        <div class="overlay text-white text-center p-5">
+            <h1>¡Bienvenido a Warrior Gym!</h1>
+            <p>Tu transformación comienza hoy. ¡Entrena con nosotros y supera tus límites!</p>
         </div>
     </div>
 
-    <!-- Footer común -->
+    <section class="ubicacion p-5 bg-light">
+        <h2>Encuéntranos en:</h2>
+        <div class="row mt-4">
+            <div class="col-md-4 bg-warning p-3 rounded">
+                <h4>Turrúcares, Alajuela</h4>
+                <p>Lunes a Viernes: 5:30AM - 9:00PM</p>
+                <p>Sábados: 6:00AM - 1:00PM</p>
+            </div>
+            <div class="col-md-8">
+                <iframe src="https://www.google.com/maps/embed?..." width="100%" height="250" style="border:0;" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer th:replace="~{layout/plantilla :: footer}"></footer>
 </body>
 </html>
