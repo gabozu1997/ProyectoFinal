@@ -8,6 +8,10 @@
 
         <main class="container mt-5">
             <h2>Registro de Usuario</h2>
+            
+            <div th:if="${mensaje}" class="alert alert-success" th:text="${mensaje}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            
             <form th:action="@{/registro}" method="post">
                 <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
                 <div class="mb-3">
