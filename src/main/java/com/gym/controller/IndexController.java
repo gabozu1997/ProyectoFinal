@@ -1,39 +1,93 @@
 package com.gym.controller;
 
+import com.gym.domain.Usuario;
+import com.gym.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class IndexController {
 
-    @GetMapping("/") // Inicio
+    @Autowired
+    private UsuarioService usuarioService;
+
+    // Página principal
+    @GetMapping("/")
     public String index() {
         return "index";
     }
 
+    // Página Inscribirse
     @GetMapping("/inscribete")
     public String inscribete() {
         return "inscribete";
     }
 
+    // Página perfil
     @GetMapping("/perfil")
     public String perfil() {
         return "perfil";
     }
 
+    // Página nosotros
     @GetMapping("/nosotros")
     public String sobreNosotros() {
         return "SobreNosotros";
     }
+
+    // Página de preguntas frecuentes
     @GetMapping("/faq")
     public String preguntasFrecuentes() {
         return "PreguntasFrecuentes";
     }
-    
-    @GetMapping("/contacto")
-public String contacto() {
-    return "Contacto";
-}
-   
-}
 
+    // Página de contacto
+    @GetMapping("/contacto")
+    public String contacto() {
+        return "Contacto";
+    }
+
+    // Mostrar formulario de registro
+    @GetMapping("/registro")
+    public String mostrarRegistro(@RequestParam(required = false) String exito, Model model) {
+        if (exito != null) {
+            model.addAttribute("mensaje", "Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
+        }
+        return "registro";
+    }
+
+    // Procesar registro
+    @PostMapping("/registro")
+    public String procesarRegistro(@RequestParam String nombre,
+                                   @RequestParam String email,
+                                   @RequestParam String telefono,
+                                   @RequestParam String password,
+                                   Model model) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(nombre);
+        usuario.setEmail(email);
+        usuario.setTelefono(telefono);
+        usuario.setPassword(password);
+
+        boolean registrado = usuarioService.registrarUsuario(usuario);
+        if (!registrado) {
+            model.addAttribute("error", "El correo ya está registrado.");
+            return "registro";
+        }
+        return "redirect:/registro?exito";
+    }
+
+    // Confirmar cuenta
+    @GetMapping("/confirmar")
+    public String confirmarCuenta(@RequestParam String codigo, Model model) {
+        boolean confirmado = usuarioService.confirmarUsuario(codigo);
+        if (confirmado) {
+            model.addAttribute("mensaje", "Cuenta confirmada con éxito. Ya puedes iniciar sesión.");
+        } else {
+            model.addAttribute("error", "Código inválido o cuenta ya confirmada.");
+        }
+        return "index";
+    }
+}
