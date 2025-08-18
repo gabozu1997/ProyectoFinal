@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 @Table(name = "usuario")
 public class Usuario implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -46,11 +47,12 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "id_usuario")
     private List<Rol> roles;
 
-    public Usuario() {}
+    public Usuario() {
+    }
 
     public Usuario(Long idUsuario, String username, String password, String nombre, String apellidos,
-                   String email, String telefono, String rutaImagen, boolean activo,
-                   String codigoConfirmacion, List<Rol> roles) {
+            String email, String telefono, String rutaImagen, boolean activo,
+            String codigoConfirmacion, List<Rol> roles) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.password = password;

@@ -34,7 +34,7 @@ public class IndexController {
     // Página nosotros
     @GetMapping("/nosotros")
     public String sobreNosotros() {
-        return "SobreNosotros";
+        return "nosotros";
     }
 
     // Página de preguntas frecuentes
