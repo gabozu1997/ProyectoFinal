@@ -1,17 +1,59 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="es"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+    <!-- ==================== Fragmento: HEAD ==================== -->
     <head th:fragment="head">
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Warrior Gym</title>
+
+        <!-- Bootstrap 5 CSS -->
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+
+        <!-- Font Awesome -->
         <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}" />
+
+        <!-- Tus estilos -->
         <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+        <!-- Mejora de visibilidad en dropdown del header -->
+        <style>
+            .navbar .dropdown-menu{
+                background-color:#212529;
+                border:0;
+                border-radius:.5rem;
+                padding:.5rem
+            }
+            .navbar .dropdown-item{
+                color:#f8f9fa;
+                border-radius:.375rem
+            }
+            .navbar .dropdown-item:hover,.navbar .dropdown-item:focus{
+                background-color:#ffc107;
+                color:#212529
+            }
+            .navbar .dropdown-divider{
+                border-top-color:rgba(255,255,255,.15)
+            }
+            .navbar .btn-outline-secondary{
+                border-color:#6c757d;
+                color:#343a40;
+                background-color:#fff
+            }
+            .navbar .btn-outline-secondary:hover{
+                background-color:#ffc107;
+                border-color:#ffc107;
+                color:#212529
+            }
+        </style>
+
+        <!-- Bootstrap 5 JS Bundle -->
         <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
     </head>
 
+    <!-- ==================== Fragmento: HEADER ==================== -->
     <header th:fragment="header">
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container">
@@ -26,10 +68,11 @@
                 </button>
 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                    <!-- Menú izquierdo -->
                     <ul class="navbar-nav">
+                        <!-- Dropdown: Experiencia Warrior -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Experiencia Warrior
                             </a>
                             <ul class="dropdown-menu">
@@ -39,9 +82,9 @@
                             </ul>
                         </li>
 
+                        <!-- Dropdown: Ayuda -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Ayuda
                             </a>
                             <ul class="dropdown-menu">
@@ -49,42 +92,50 @@
                                 <li><a class="dropdown-item" th:href="@{/contacto}">Contacto</a></li>
                             </ul>
                         </li>
+
+                        <!-- Vínculos por rol -->
+                        <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','PERSONAL')">
+                            <a class="nav-link" th:href="@{/personal/panel}">
+                                <i class="fas fa-clipboard-list me-1"></i> Panel Personal
+                            </a>
+                        </li>
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link" th:href="@{/admin}">
+                                <i class="fas fa-tools me-1"></i> Administración
+                            </a>
+                        </li>
                     </ul>
 
+                    <!-- Menú derecho (estado de autenticación) -->
                     <ul class="navbar-nav align-items-center">
-                        <li class="nav-item me-2" sec:authorize="!isAuthenticated()">
+                        <!-- Visitante -->
+                        <li class="nav-item me-2" sec:authorize="isAnonymous()">
                             <a class="btn btn-warning text-white fw-bold shadow-sm" th:href="@{/registro}">Inscríbete</a>
                         </li>
-                        <li class="nav-item" sec:authorize="!isAuthenticated()">
-                            <a class="btn btn-outline-secondary fw-bold shadow-sm" th:href="@{/perfil}">
-                                <i class="fas fa-user me-1"></i> Iniciar Sesión
+                        <li class="nav-item" sec:authorize="isAnonymous()">
+                            <a class="btn btn-outline-secondary fw-bold shadow-sm" th:href="@{/login}">
+                                <i class="fas fa-sign-in-alt me-1"></i> Iniciar sesión
                             </a>
                         </li>
 
+                        <!-- Autenticado -->
                         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-
-                                <img th:src="${(usuarioActual != null and !#strings.isEmpty(usuarioActual.rutaImagen)) 
-                                     ? usuarioActual.rutaImagen 
-                                     : '/images/default-avatar.png'}"
-                                     alt="avatar" class="rounded-circle me-2" width="32" height="32" />
-
-                                <span class="fw-semibold"
-                                      th:text="${(usuarioActual != null) 
-                                      ? ((usuarioActual.nombre ?: '') + ' ' + (usuarioActual.apellidos ?: '')) 
-                                      : #authentication.name}">
-                                    Usuario
-                                </span>
+                            <a class="btn btn-outline-secondary fw-bold shadow-sm dropdown-toggle" href="#"
+                               id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-1"></i>
+                                <span th:text="${#authentication?.name}">usuario</span>
                             </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" th:href="@{/perfil}"><i class="fas fa-user me-2"></i> Perfil</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                <li><h6 class="dropdown-header"><i class="fas fa-id-badge me-2"></i> Conectado</h6></li>
+                                <li><a class="dropdown-item" th:href="@{/perfil}"><i class="fas fa-user-circle me-2"></i> Mi perfil</a></li>
+                                <li><a class="dropdown-item" th:href="@{/perfil/editar}"><i class="fas fa-user-edit me-2"></i> Editar perfil</a></li>
+                                <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" th:href="@{/admin}"><i class="fas fa-tools me-2"></i> Administración</a></li>
+                                <li sec:authorize="hasAnyRole('ADMIN','PERSONAL')"><a class="dropdown-item" th:href="@{/personal/panel}"><i class="fas fa-clipboard-list me-2"></i> Panel Personal</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <form th:action="@{/logout}" method="post" class="px-3">
-                                        <button type="submit" class="btn btn-link p-0">
-                                            <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+                                    <form th:action="@{/logout}" method="post" class="px-3 py-1">
+                                        <button type="submit" class="btn btn-danger w-100">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Salir
                                         </button>
                                     </form>
                                 </li>
@@ -92,20 +143,22 @@
                         </li>
                     </ul>
                 </div>
+
             </div>
         </nav>
     </header>
 
+    <!-- ==================== Fragmento: FOOTER ==================== -->
     <footer th:fragment="footer">
         <div class="bg-dark text-white pt-5 pb-3">
             <div class="container text-center">
                 <img src="https://tse2.mm.bing.net/th/id/OIP.1XWKqs5zXvVdDG4uJ_NX0wHaHZ?rs=1&pid=ImgDetMain&o=7&rm=3"
                      alt="Warrior Gym" height="50" class="mb-3" />
                 <div class="mb-3">
-                    <a href="https://instagram.com/warrior_gym" class="text-white mx-3" target="_blank">
+                    <a href="https://instagram.com/warrior_gym" class="text-white mx-3" target="_blank" rel="noopener">
                         <i class="fab fa-instagram fa-2x"></i>
                     </a>
-                    <a href="https://wa.me/506XXXXXXXX" class="text-white mx-3" target="_blank">
+                    <a href="https://wa.me/506XXXXXXXX" class="text-white mx-3" target="_blank" rel="noopener">
                         <i class="fab fa-whatsapp fa-2x"></i>
                     </a>
                 </div>

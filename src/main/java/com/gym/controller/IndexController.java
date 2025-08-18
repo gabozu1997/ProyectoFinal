@@ -2,51 +2,62 @@ package com.gym.controller;
 
 import com.gym.domain.Usuario;
 import com.gym.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class IndexController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
-    // Página principal
+    public IndexController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
     @GetMapping("/")
     public String index() {
         return "index";
     }
 
-    // Página Inscribirse
     @GetMapping("/inscribete")
     public String inscribete() {
         return "inscribete";
     }
 
-    // Página perfil
-    @GetMapping("/perfil")
-    public String perfil() {
-        return "perfil";
-    }
-
-    // Página nosotros
     @GetMapping("/nosotros")
     public String sobreNosotros() {
         return "nosotros";
     }
 
-    // Página de preguntas frecuentes
     @GetMapping("/faq")
     public String preguntasFrecuentes() {
         return "PreguntasFrecuentes";
     }
 
-    // Página de contacto
     @GetMapping("/contacto")
-    public String contacto() {
+    public String contacto(@RequestParam(required = false) String enviado, Model model) {
+        if (enviado != null) {
+            model.addAttribute("mensaje", "¡Gracias! Pronto nos pondremos en contacto contigo.");
+        }
         return "Contacto";
+    }
+
+    @PostMapping("/contacto/enviar")
+    public String enviarContacto(@RequestParam String nombre,
+            @RequestParam String correo,
+            @RequestParam(required = false) String telefono,
+            @RequestParam String asunto,
+            @RequestParam String preferencia,
+            RedirectAttributes ra) {
+        ra.addAttribute("enviado", "ok");
+        return "redirect:/contacto";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
     @GetMapping("/registro")
@@ -89,11 +100,9 @@ public class IndexController {
         }
         return "index";
     }
-    // Página de horarios
 
     @GetMapping("/horarios")
     public String horarios() {
         return "Horarios";
     }
-
 }

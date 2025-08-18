@@ -60,7 +60,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (crearRolUsuario) {
             Rol rol = new Rol();
             rol.setNombre("USUARIO");
-            rol.setIdUsuario(usuario.getIdUsuario());
+            rol.setUsuario(usuario);
             rolDao.save(rol);
         }
     }
