@@ -4,16 +4,14 @@ import com.gym.dao.RolDao;
 import com.gym.dao.UsuarioDao;
 import com.gym.domain.Rol;
 import com.gym.domain.Usuario;
-import com.gym.repository.UsuarioRepository;
-import com.gym.service.UsuarioService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
-
     @Autowired
     private UsuarioDao usuarioDao;
     @Autowired
@@ -45,14 +43,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public Usuario getUsuarioPorUsernameOCorreo(String username, String correo) {
-        return usuarioDao.findByUsernameOrCorreo(username, correo);
+    public Usuario getUsuarioPorUsernameOEmail(String username, String email) {
+        return usuarioDao.findByUsernameOrEmail(username, email);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existeUsuarioPorUsernameOCorreo(String username, String correo) {
-        return usuarioDao.existsByUsernameOrCorreo(username, correo);
+    public boolean existeUsuarioPorUsernameOEmail(String username, String email) {
+        return usuarioDao.existsByUsernameOrEmail(username, email);
     }
 
     @Override
@@ -73,21 +71,32 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioDao.delete(usuario);
     }
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
     @Override
+    @Transactional
     public boolean registrarUsuario(Usuario usuario) {
-        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
+        if (usuarioDao.existsByUsernameOrEmail(usuario.getUsername(), usuario.getEmail())) {
             return false; // usuario ya existe
         }
-        usuarioRepository.save(usuario);
+        String codigo = UUID.randomUUID().toString();
+        usuario.setCodigoConfirmacion(codigo);
+        usuario.setActivo(false);
+        usuarioDao.save(usuario);
         return true;
     }
 
     @Override
+    @Transactional
     public boolean confirmarUsuario(String codigo) {
-        // Implementación futura
-        return false;
+        Usuario usuario = usuarioDao.findByCodigoConfirmacion(codigo);
+        if (usuario == null) {
+            return false; 
+        }
+        if (usuario.isActivo()) {
+            return false; 
+        }
+        usuario.setActivo(true);
+        usuario.setCodigoConfirmacion(null);
+        usuarioDao.save(usuario);
+        return true;
     }
 }

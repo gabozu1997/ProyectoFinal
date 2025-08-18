@@ -24,3 +24,11 @@
     color: white;
 }
 
+.card img {
+    height: 220px;
+    object-fit: cover;
+}
+.bg-warning {
+    font-size: 0.95rem;
+}
+

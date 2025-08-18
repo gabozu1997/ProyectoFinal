@@ -49,7 +49,6 @@ public class IndexController {
         return "Contacto";
     }
 
-    // Mostrar formulario de registro
     @GetMapping("/registro")
     public String mostrarRegistro(@RequestParam(required = false) String exito, Model model) {
         if (exito != null) {
@@ -58,28 +57,28 @@ public class IndexController {
         return "registro";
     }
 
-    // Procesar registro
     @PostMapping("/registro")
     public String procesarRegistro(@RequestParam String nombre,
-                                   @RequestParam String email,
-                                   @RequestParam String telefono,
-                                   @RequestParam String password,
-                                   Model model) {
+            @RequestParam String email,
+            @RequestParam String telefono,
+            @RequestParam String password,
+            @RequestParam String username,
+            Model model) {
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
         usuario.setEmail(email);
         usuario.setTelefono(telefono);
         usuario.setPassword(password);
+        usuario.setUsername(username);
 
         boolean registrado = usuarioService.registrarUsuario(usuario);
         if (!registrado) {
-            model.addAttribute("error", "El correo ya está registrado.");
+            model.addAttribute("error", "El correo o nombre de usuario ya están registrados.");
             return "registro";
         }
         return "redirect:/registro?exito";
     }
 
-    // Confirmar cuenta
     @GetMapping("/confirmar")
     public String confirmarCuenta(@RequestParam String codigo, Model model) {
         boolean confirmado = usuarioService.confirmarUsuario(codigo);
@@ -90,4 +89,11 @@ public class IndexController {
         }
         return "index";
     }
+    // Página de horarios
+
+    @GetMapping("/horarios")
+    public String horarios() {
+        return "Horarios";
+    }
+
 }
