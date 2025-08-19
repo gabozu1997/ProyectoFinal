@@ -40,30 +40,46 @@ public class SecurityConfig {
         http.authenticationProvider(provider);
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        "/", "/inscribete", "/nosotros", "/faq", "/contacto",
-                        "/registro", "/confirmar", "/horarios", "/login",
-                        "/webjars/**", "/css/**", "/static/**", "/images/**", "/js/**"
-                ).permitAll()
-                .requestMatchers(HttpMethod.GET, "/membresias").permitAll()
-                .requestMatchers("/membresias/seleccionar/**", "/membresias/aplicar").authenticated()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/personal/**").hasAnyRole("ADMIN", "PERSONAL")
-                .requestMatchers("/perfil/**").authenticated()
-                .anyRequest().authenticated()
+            .requestMatchers(
+                "/", "/inscribete", "/nosotros", "/faq", "/contacto",
+                "/registro", "/confirmar", "/horarios", "/login",
+               
+                "/webjars/**", "/css/**", "/static/**", "/images/**", "/img/**", "/js/**"
+            ).permitAll()
+
+        
+            .requestMatchers(HttpMethod.GET, "/membresias").permitAll()
+            .requestMatchers("/membresias/seleccionar/**", "/membresias/aplicar").authenticated()
+
+           
+            .requestMatchers(HttpMethod.GET, "/forgot-password", "/forgot-password/done").permitAll()
+            .requestMatchers(HttpMethod.POST, "/forgot-password").permitAll()
+
+          
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/personal/**").hasAnyRole("ADMIN", "PERSONAL")
+            .requestMatchers("/perfil/**").authenticated()
+
+            .anyRequest().authenticated()
         );
 
         http.formLogin(login -> login
-                .loginPage("/login").permitAll()
-                .loginProcessingUrl("/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .failureUrl("/login?error")
-                .defaultSuccessUrl("/perfil", true)
+            .loginPage("/login").permitAll()
+            .loginProcessingUrl("/login")
+            .usernameParameter("email")
+            .passwordParameter("password")
+            .failureUrl("/login?error")
+            .defaultSuccessUrl("/perfil", true)
         );
 
-        http.logout(l -> l.logoutUrl("/logout").logoutSuccessUrl("/").permitAll());
+        http.logout(l -> l
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/")
+            .permitAll()
+        );
+
         http.csrf(csrf -> csrf.disable());
+
         return http.build();
     }
 }

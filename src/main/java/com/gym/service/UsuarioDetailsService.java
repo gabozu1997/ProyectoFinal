@@ -38,7 +38,7 @@ public class UsuarioDetailsService implements UserDetailsService {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        // Hacemos que el principal sea el EMAIL para que auth.getName() devuelva el email
+       
         return User.withUsername(u.getEmail())
                 .password(u.getPassword())
                 .authorities(authorities)

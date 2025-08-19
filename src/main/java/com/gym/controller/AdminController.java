@@ -8,7 +8,7 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String adminHome() {
-        // Renderiza templates/admin/index.html
+        
         return "admin/index";
     }
 }

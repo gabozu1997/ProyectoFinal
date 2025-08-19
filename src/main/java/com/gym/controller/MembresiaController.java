@@ -30,14 +30,14 @@ public class MembresiaController {
         this.usuarioMembresiaService = usuarioMembresiaService;
     }
 
-    // Público: ver planes
+   
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("planes", planService.listarActivasOrdenPrecio());
         return "membresias";
     }
 
-    // Protegido: confirmar selección
+    
     @GetMapping("/seleccionar/{id}")
     public String confirmar(@PathVariable("id") Long idPlan, Model model) {
         MembresiaPlan plan = planService.buscarPorId(idPlan)
@@ -46,7 +46,7 @@ public class MembresiaController {
         return "membresias_confirmar";
     }
 
-    // Protegido: aplicar contratación
+    
     @PostMapping("/aplicar")
     public String aplicar(@RequestParam("planId") Long planId,
             Authentication authentication,

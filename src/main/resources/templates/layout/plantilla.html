@@ -101,12 +101,12 @@
                             </a>
                         </li>
 
-                        <!-- ======= BLOQUE REEMPLAZADO (imagen de BD + nombre y apellidos) ======= -->
+                       
                         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                             <a class="btn btn-outline-secondary fw-bold shadow-sm dropdown-toggle d-flex align-items-center"
                                href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
-                                <!-- Foto desde BD (usuarioActual.rutaImagen) o avatar por defecto -->
+                                
                                 <img th:if="${usuarioActual != null and !#strings.isEmpty(usuarioActual.rutaImagen)}"
                                      th:src="${usuarioActual.rutaImagen}"
                                      alt="avatar" class="rounded-circle me-2" width="28" height="28"/>
@@ -114,7 +114,7 @@
                                      th:src="@{/img/default-avatar.png}"
                                      alt="avatar" class="rounded-circle me-2" width="28" height="28"/>
 
-                                <!-- Nombre completo si existe usuarioActual; si no, email del principal -->
+                                
                                 <span th:if="${usuarioActual != null}"
                                       th:text="${usuarioActual.nombre + ' ' + usuarioActual.apellidos}">
                                     Usuario
@@ -140,7 +140,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- ======= FIN BLOQUE REEMPLAZADO ======= -->
+                        
                     </ul>
                 </div>
 

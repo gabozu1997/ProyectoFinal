@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface MembresiaRepository extends JpaRepository<Membresia, Long> {
 
-    // Esto es lo que te fallaba: ahora sí existen 'activo' y 'precioMensual' en la entidad
+    
     List<Membresia> findByActivoTrueOrderByPrecioMensualAsc();
 }

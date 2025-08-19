@@ -38,7 +38,7 @@ public class UsuarioMembresiaServiceImpl implements UsuarioMembresiaService {
         MembresiaPlan plan = membresiaPlanRepository.findById(idPlan)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plan no encontrado"));
 
-        // Si tiene una activa, la cancelamos y cerramos fechas
+        
         usuarioMembresiaRepository
                 .findTopByUsuarioIdUsuarioAndEstadoOrderByFechaInicioDesc(usuario.getIdUsuario(), EstadoMembresia.ACTIVA)
                 .ifPresent(actual -> {

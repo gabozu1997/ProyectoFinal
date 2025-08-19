@@ -8,7 +8,7 @@ public class PersonalController {
 
     @GetMapping("/personal/panel")
     public String panelPersonal() {
-        // Renderiza templates/personal/panel.html
+        
         return "personal/panel";
     }
 }
