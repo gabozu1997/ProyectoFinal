@@ -13,7 +13,10 @@
             <div class="position-relative text-center d-flex flex-column justify-content-center align-items-center h-100">
                 <h1 class="display-5 fw-bold">Perfil</h1>
                 <p class="lead mb-0" sec:authorize="isAuthenticated()">
-                    Sesión activa como <strong sec:authentication="name">usuario</strong>
+                    Sesión activa como
+                    <strong th:text="${usuarioActual != null
+                            ? (usuarioActual.nombre + ' ' + usuarioActual.apellidos)
+                            : #authentication?.name}">usuario</strong>
                 </p>
             </div>
         </section>
@@ -32,7 +35,7 @@
                     <span th:text="${error}">Ocurrió un problema</span>
                 </div>
 
-                <!-- Aviso sin autenticación (por si llegaran directo) -->
+                <!-- Aviso sin autenticación -->
                 <div class="alert alert-warning d-flex align-items-center" sec:authorize="!isAuthenticated()">
                     <i class="fas fa-lock me-2"></i>
                     Debes iniciar sesión para ver tu perfil.
@@ -44,109 +47,138 @@
                     <div class="col-lg-4">
                         <div class="card shadow h-100">
                             <div class="card-body text-center">
-                                <div class="rounded-circle bg-warning mx-auto mb-3"
-                                     style="width:110px;height:110px; display:flex;align-items:center;justify-content:center;">
-                                    <i class="fas fa-user fa-3x text-white"></i>
-                                </div>
+                                <!-- Avatar desde BD con fallback -->
+                                <img th:if="${usuarioActual != null and !#strings.isEmpty(usuarioActual.rutaImagen)}"
+                                     th:src="${usuarioActual.rutaImagen}"
+                                     alt="avatar" class="rounded-circle mb-3"
+                                     style="width:110px;height:110px;object-fit:cover;">
+                                    <img th:if="${usuarioActual == null or #strings.isEmpty(usuarioActual.rutaImagen)}"
+                                         th:src="@{/img/default-avatar.png}"
+                                         alt="avatar" class="rounded-circle mb-3"
+                                         style="width:110px;height:110px;object-fit:cover;">
 
-                                <!-- Username desde el modelo o desde auth -->
-                                <h5 class="card-title mb-0"
-                                    th:text="${username} ?: ${#authentication?.name}">usuario</h5>
-                                <small class="text-muted">Miembro activo</small>
-                            </div>
-
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <i class="fas fa-id-card me-2"></i>
-                                    <span th:text="${nombre} ?: '—'">Nombre Completo</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-envelope me-2"></i>
-                                    <span th:text="${email} ?: '—'">correo@ejemplo.com</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-phone me-2"></i>
-                                    <span th:text="${telefono} ?: '—'">0000-0000</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-user-shield me-2"></i>
-
-                                    <!-- CORREGIDO: !#strings.isEmpty(...) en lugar de isNotEmpty -->
-                                    <span th:if="${roles != null and !#strings.isEmpty(roles)}"
-                                          class="badge bg-light text-dark" th:text="${roles}">USUARIO</span>
-
-                                    <!-- Si no vino 'roles' como String, mostramos authorities -->
-                                    <th:block th:if="${roles == null or #strings.isEmpty(roles)}">
-                                        <span th:each="a : ${#authentication?.authorities}"
-                                              th:text="${a?.authority}"
-                                              class="badge bg-light text-dark me-1">USUARIO</span>
-                                    </th:block>
-                                </li>
-                            </ul>
-
-                            <div class="card-body text-center">
-                                <form th:action="@{/logout}" method="post" class="d-inline">
-                                    <button class="btn btn-danger fw-bold">
-                                        <i class="fas fa-sign-out-alt me-1"></i> Salir
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Col derecha: detalles -->
-                    <div class="col-lg-8 d-flex flex-column gap-4">
-
-                        <!-- Datos de la cuenta -->
-                        <div class="card shadow">
-                            <div class="card-header bg-warning text-dark">
-                                <h5 class="mb-0">Datos de la cuenta</h5>
-                            </div>
-                            <div class="card-body">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Nombre</label>
-                                            <input class="form-control" th:value="${nombre} ?: '—'" readonly>
+                                        <!-- Nombre completo -->
+                                        <h5 class="card-title mb-0"
+                                            th:text="${usuarioActual != null
+                                            ? (usuarioActual.nombre + ' ' + usuarioActual.apellidos)
+                                            : #authentication?.name}">Nombre Apellido</h5>
+                                        <small class="text-muted">Miembro activo</small>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Usuario</label>
-                                            <input class="form-control" th:value="${username} ?: ${#authentication?.name}" readonly>
+
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                <i class="fas fa-id-card me-2"></i>
+                                                <!-- Username -->
+                                                <span th:text="${usuarioActual != null and !#strings.isEmpty(usuarioActual.username)
+                                                      ? usuarioActual.username
+                                                      : #authentication?.name}">usuario</span>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <i class="fas fa-envelope me-2"></i>
+                                                <!-- Email -->
+                                                <span th:text="${usuarioActual != null and !#strings.isEmpty(usuarioActual.email)
+                                                      ? usuarioActual.email
+                                                      : #authentication?.name}">correo@ejemplo.com</span>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <i class="fas fa-phone me-2"></i>
+                                                <!-- Teléfono -->
+                                                <span th:text="${usuarioActual != null and !#strings.isEmpty(usuarioActual.telefono)
+                                                      ? usuarioActual.telefono
+                                                      : '—'}">0000-0000</span>
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <i class="fas fa-user-shield me-2"></i>
+                                                <!-- Roles -->
+                                                <span th:each="a : ${#authentication?.authorities}"
+                                                      th:text="${a?.authority}"
+                                                      class="badge bg-light text-dark me-1">USUARIO</span>
+                                            </li>
+                                        </ul>
+
+                                        <div class="card-body text-center">
+                                            <form th:action="@{/logout}" method="post" class="d-inline">
+                                                <button class="btn btn-danger fw-bold">
+                                                    <i class="fas fa-sign-out-alt me-1"></i> Salir
+                                                </button>
+                                            </form>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Correo</label>
-                                            <input class="form-control" th:value="${email} ?: '—'" readonly>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Teléfono</label>
-                                            <input class="form-control" th:value="${telefono} ?: '—'" readonly>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
 
-                        <!-- Membresía -->
-                        <div class="card shadow">
-                            <div class="card-header bg-warning text-dark">
-                                <h5 class="mb-0">Membresía</h5>
-                            </div>
-                            <div class="card-body">
-                                <p class="mb-2">
-                                    <i class="fas fa-dumbbell me-2"></i>
-                                    Plan actual:
-                                    <strong th:text="${membresiaNombre} ?: 'Sin plan'">BÁSICO</strong>
-                                </p>
-                                <a th:href="@{/membresias}" class="btn btn-outline-warning">Mejorar plan</a>
-                            </div>
-                        </div>
+                                        <!-- Col derecha: detalles -->
+                                        <div class="col-lg-8 d-flex flex-column gap-4">
 
-                    </div>
-                </div>
+                                            <!-- Datos de la cuenta -->
+                                            <div class="card shadow">
+                                                <div class="card-header bg-warning text-dark">
+                                                    <h5 class="mb-0">Datos de la cuenta</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form>
+                                                        <div class="row g-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">Nombre</label>
+                                                                <input class="form-control" readonly
+                                                                       th:value="${usuarioActual != null
+                                                                       ? (usuarioActual.nombre + ' ' + usuarioActual.apellidos)
+                                                                       : #authentication?.name}">
+                                                            </div>
 
-            </div>
-        </section>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">Usuario</label>
+                                                                <input class="form-control" readonly
+                                                                       th:value="${usuarioActual != null and !#strings.isEmpty(usuarioActual.username)
+                                                                       ? usuarioActual.username
+                                                                       : #authentication?.name}">
+                                                            </div>
 
-        <footer th:replace="~{layout/plantilla :: footer}"></footer>
-    </body>
-</html>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">Correo</label>
+                                                                <input class="form-control" readonly
+                                                                       th:value="${usuarioActual != null and !#strings.isEmpty(usuarioActual.email)
+                                                                       ? usuarioActual.email
+                                                                       : #authentication?.name}">
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">Teléfono</label>
+                                                                <input class="form-control" readonly
+                                                                       th:value="${usuarioActual != null and !#strings.isEmpty(usuarioActual.telefono)
+                                                                       ? usuarioActual.telefono
+                                                                       : '—'}">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                            <!-- Membresía -->
+                                            <div class="card shadow">
+                                                <div class="card-header bg-warning text-dark">
+                                                    <h5 class="mb-0">Membresía</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="mb-2">
+                                                        <i class="fas fa-dumbbell me-2"></i>
+                                                        Plan actual:
+                                                        <strong th:text="${membresiaNombre != null and !#strings.isEmpty(membresiaNombre)
+                                                                ? membresiaNombre
+                                                                : 'Sin plan'}">Sin plan</strong>
+                                                    </p>
+                                                    <a th:href="@{/membresias}" class="btn btn-outline-warning">Mejorar plan</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        </div>
+
+                                        </div>
+                                        </section>
+
+                                        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+                                        </body>
+                                        </html>

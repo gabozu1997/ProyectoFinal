@@ -45,14 +45,10 @@ public class SecurityConfig {
                         "/registro", "/confirmar", "/horarios", "/login",
                         "/webjars/**", "/css/**", "/static/**", "/images/**", "/js/**"
                 ).permitAll()
-                // Ver planes: público
                 .requestMatchers(HttpMethod.GET, "/membresias").permitAll()
-                // Acciones: requieren login
                 .requestMatchers("/membresias/seleccionar/**", "/membresias/aplicar").authenticated()
-                // Zonas por rol
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/personal/**").hasAnyRole("ADMIN", "PERSONAL")
-                // Perfil
                 .requestMatchers("/perfil/**").authenticated()
                 .anyRequest().authenticated()
         );

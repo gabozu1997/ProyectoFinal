@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html lang="es"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-    <!-- ==================== Fragmento: HEAD ==================== -->
     <head th:fragment="head">
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Warrior Gym</title>
-
-        <!-- Bootstrap 5 CSS -->
         <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-
-        <!-- Font Awesome -->
         <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}" />
-
-        <!-- Tus estilos -->
         <link rel="stylesheet" th:href="@{/css/styles.css}" />
-
-        <!-- Mejora de visibilidad en dropdown del header -->
         <style>
             .navbar .dropdown-menu{
                 background-color:#212529;
@@ -49,11 +40,9 @@
             }
         </style>
 
-        <!-- Bootstrap 5 JS Bundle -->
         <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
     </head>
 
-    <!-- ==================== Fragmento: HEADER ==================== -->
     <header th:fragment="header">
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container">
@@ -68,9 +57,7 @@
                 </button>
 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                    <!-- Menú izquierdo -->
                     <ul class="navbar-nav">
-                        <!-- Dropdown: Experiencia Warrior -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Experiencia Warrior
@@ -82,7 +69,6 @@
                             </ul>
                         </li>
 
-                        <!-- Dropdown: Ayuda -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Ayuda
@@ -93,7 +79,6 @@
                             </ul>
                         </li>
 
-                        <!-- Vínculos por rol -->
                         <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','PERSONAL')">
                             <a class="nav-link" th:href="@{/personal/panel}">
                                 <i class="fas fa-clipboard-list me-1"></i> Panel Personal
@@ -106,9 +91,7 @@
                         </li>
                     </ul>
 
-                    <!-- Menú derecho (estado de autenticación) -->
                     <ul class="navbar-nav align-items-center">
-                        <!-- Visitante -->
                         <li class="nav-item me-2" sec:authorize="isAnonymous()">
                             <a class="btn btn-warning text-white fw-bold shadow-sm" th:href="@{/registro}">Inscríbete</a>
                         </li>
@@ -118,12 +101,28 @@
                             </a>
                         </li>
 
-                        <!-- Autenticado -->
+                        <!-- ======= BLOQUE REEMPLAZADO (imagen de BD + nombre y apellidos) ======= -->
                         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                            <a class="btn btn-outline-secondary fw-bold shadow-sm dropdown-toggle" href="#"
-                               id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-1"></i>
-                                <span th:text="${#authentication?.name}">usuario</span>
+                            <a class="btn btn-outline-secondary fw-bold shadow-sm dropdown-toggle d-flex align-items-center"
+                               href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                <!-- Foto desde BD (usuarioActual.rutaImagen) o avatar por defecto -->
+                                <img th:if="${usuarioActual != null and !#strings.isEmpty(usuarioActual.rutaImagen)}"
+                                     th:src="${usuarioActual.rutaImagen}"
+                                     alt="avatar" class="rounded-circle me-2" width="28" height="28"/>
+                                <img th:if="${usuarioActual == null or #strings.isEmpty(usuarioActual.rutaImagen)}"
+                                     th:src="@{/img/default-avatar.png}"
+                                     alt="avatar" class="rounded-circle me-2" width="28" height="28"/>
+
+                                <!-- Nombre completo si existe usuarioActual; si no, email del principal -->
+                                <span th:if="${usuarioActual != null}"
+                                      th:text="${usuarioActual.nombre + ' ' + usuarioActual.apellidos}">
+                                    Usuario
+                                </span>
+                                <span th:if="${usuarioActual == null}"
+                                      th:text="${#authentication.name}">
+                                    Usuario
+                                </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                                 <li><h6 class="dropdown-header"><i class="fas fa-id-badge me-2"></i> Conectado</h6></li>
@@ -141,6 +140,7 @@
                                 </li>
                             </ul>
                         </li>
+                        <!-- ======= FIN BLOQUE REEMPLAZADO ======= -->
                     </ul>
                 </div>
 
@@ -148,7 +148,6 @@
         </nav>
     </header>
 
-    <!-- ==================== Fragmento: FOOTER ==================== -->
     <footer th:fragment="footer">
         <div class="bg-dark text-white pt-5 pb-3">
             <div class="container text-center">

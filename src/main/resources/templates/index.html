@@ -11,13 +11,10 @@
 
     <main>
 
-      <!-- HERO -->
       <section class="position-relative text-white" style="min-height:60vh;">
-        <!-- Fondo imagen -->
         <div class="position-absolute top-0 start-0 w-100 h-100"
              style="background:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;">
         </div>
-        <!-- Overlay -->
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,.55);"></div>
 
         <div class="position-relative d-flex align-items-center h-100">
@@ -29,8 +26,7 @@
                   Tu transformación comienza hoy. Encuentra la energía, disciplina y comunidad que necesitas
                   para alcanzar tus objetivos. ¡Entrena con nosotros y supera tus límites!
                 </p>
-
-                <!-- CTAs según estado -->
+                
                 <div class="mt-2" sec:authorize="isAnonymous()">
                   <a th:href="@{/registro}" class="btn btn-warning btn-lg me-2">Inscríbete</a>
                   <a th:href="@{/login}" class="btn btn-outline-light btn-lg">Iniciar sesión</a>
@@ -46,7 +42,6 @@
         </div>
       </section>
 
-      <!-- INFO + MAPA -->
       <section class="info-map py-5">
         <div class="container">
           <div class="row align-items-center">
