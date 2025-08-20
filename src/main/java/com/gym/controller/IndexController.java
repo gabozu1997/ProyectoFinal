@@ -1,6 +1,5 @@
 package com.gym.controller;
 
-import com.gym.domain.Usuario;
 import com.gym.service.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +20,10 @@ public class IndexController {
         return "index";
     }
 
+   
     @GetMapping("/inscribete")
     public String inscribete() {
-        return "inscribete";
+        return "redirect:/registro";
     }
 
     @GetMapping("/nosotros")
@@ -58,36 +58,6 @@ public class IndexController {
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-    @GetMapping("/registro")
-    public String mostrarRegistro(@RequestParam(required = false) String exito, Model model) {
-        if (exito != null) {
-            model.addAttribute("mensaje", "Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
-        }
-        return "registro";
-    }
-
-    @PostMapping("/registro")
-    public String procesarRegistro(@RequestParam String nombre,
-            @RequestParam String email,
-            @RequestParam String telefono,
-            @RequestParam String password,
-            @RequestParam String username,
-            Model model) {
-        Usuario usuario = new Usuario();
-        usuario.setNombre(nombre);
-        usuario.setEmail(email);
-        usuario.setTelefono(telefono);
-        usuario.setPassword(password);
-        usuario.setUsername(username);
-
-        boolean registrado = usuarioService.registrarUsuario(usuario);
-        if (!registrado) {
-            model.addAttribute("error", "El correo o nombre de usuario ya están registrados.");
-            return "registro";
-        }
-        return "redirect:/registro?exito";
     }
 
     @GetMapping("/confirmar")

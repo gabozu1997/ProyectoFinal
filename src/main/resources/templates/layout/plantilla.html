@@ -39,7 +39,6 @@
                 color:#212529
             }
         </style>
-
         <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
     </head>
 
@@ -101,28 +100,19 @@
                             </a>
                         </li>
 
-                       
                         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                             <a class="btn btn-outline-secondary fw-bold shadow-sm dropdown-toggle d-flex align-items-center"
                                href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-                                
                                 <img th:if="${usuarioActual != null and !#strings.isEmpty(usuarioActual.rutaImagen)}"
                                      th:src="${usuarioActual.rutaImagen}"
                                      alt="avatar" class="rounded-circle me-2" width="28" height="28"/>
                                 <img th:if="${usuarioActual == null or #strings.isEmpty(usuarioActual.rutaImagen)}"
                                      th:src="@{/img/default-avatar.png}"
                                      alt="avatar" class="rounded-circle me-2" width="28" height="28"/>
-
-                                
                                 <span th:if="${usuarioActual != null}"
-                                      th:text="${usuarioActual.nombre + ' ' + usuarioActual.apellidos}">
-                                    Usuario
-                                </span>
+                                      th:text="${usuarioActual.nombre + ' ' + usuarioActual.apellidos}">Usuario</span>
                                 <span th:if="${usuarioActual == null}"
-                                      th:text="${#authentication.name}">
-                                    Usuario
-                                </span>
+                                      th:text="${#authentication.name}">Usuario</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                                 <li><h6 class="dropdown-header"><i class="fas fa-id-badge me-2"></i> Conectado</h6></li>
@@ -140,12 +130,20 @@
                                 </li>
                             </ul>
                         </li>
-                        
                     </ul>
                 </div>
-
             </div>
         </nav>
+
+        
+        <div class="container mt-3" th:if="${mensaje}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${mensaje}">Mensaje</span>
+                <a class="ms-2" th:href="@{/}">Volver al menú principal</a>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        
     </header>
 
     <footer th:fragment="footer">
